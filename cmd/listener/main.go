@@ -24,7 +24,9 @@ type LogTransfer struct {
 
 func main() {
 	endpoint := flag.String("endpoint", "", "endpoint of eth node")
+	erc20TokenAddress := flag.String("address", "0xdAC17F958D2ee523a2206206994597C13D831ec7", "erc20 token address")
 	flag.Parse()
+
 	c, err := ethclient.Dial(*endpoint)
 	if err != nil {
 		log.Println("eth client dial err", err)
@@ -32,7 +34,7 @@ func main() {
 	}
 	defer c.Close()
 
-	address := common.HexToAddress("0xdAC17F958D2ee523a2206206994597C13D831ec7")
+	address := common.HexToAddress(*erc20TokenAddress)
 	logs := make(chan types.Log)
 	sub, err := c.SubscribeFilterLogs(context.Background(), ethereum.FilterQuery{
 		Addresses: []common.Address{address},
